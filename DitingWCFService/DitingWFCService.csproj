@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3907C205-1D09-4CBC-B698-BDE1F35D3D50}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WcfSmcGridService</RootNamespace>
+    <AssemblyName>WcfSmcGridService</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=5.3.1.0, Culture=neutral, PublicKeyToken=9ec0ff091d04b091, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rdParty\Apose\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\BatchDownloadDataUtil.cs" />
+    <Compile Include="BLL\DataServiceImpl.cs" />
+    <Compile Include="BLL\HomeDataImpl.cs" />
+    <Compile Include="BLL\RegisterImpl.cs" />
+    <Compile Include="BLL\SystemAdminImpl.cs" />
+    <Compile Include="BLL\UserManagerImpl.cs" />
+    <Compile Include="commonHandler\IPLocation.cs" />
+    <Compile Include="commonHandler\IPScanner.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AllRole.cs" />
+    <Compile Include="Model\Articles.cs" />
+    <Compile Include="Model\Books.cs" />
+    <Compile Include="Model\Copyrights.cs" />
+    <Compile Include="Model\DataServiceGroupModuleVo.cs" />
+    <Compile Include="Model\DataServiceModuleVo.cs" />
+    <Compile Include="Model\DownloadListVo.cs" />
+    <Compile Include="Model\DynamicInfoVo.cs" />
+    <Compile Include="Model\FileDownVo.cs" />
+    <Compile Include="Model\GetUserFormInfoList.cs" />
+    <Compile Include="Model\InsertQuestionDataList.cs" />
+    <Compile Include="Model\Kaifangtongji.cs" />
+    <Compile Include="Model\PopWindowSumInfoVo.cs" />
+    <Compile Include="Model\QuestionItem.cs" />
+    <Compile Include="Model\RegisterItem.cs" />
+    <Compile Include="Model\RelateResultsGroup.cs" />
+    <Compile Include="Model\ResultVo.cs" />
+    <Compile Include="Model\TimeIntervalVo.cs" />
+    <Compile Include="Model\t_temp.cs" />
+    <Compile Include="Model\T_test.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SYS\BigData\DataService.svc.cs">
+      <DependentUpon>DataService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\GetAHData.svc.cs">
+      <DependentUpon>GetAHData.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\HomeDataService.svc.cs">
+      <DependentUpon>HomeDataService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\IDataService.cs" />
+    <Compile Include="SYS\BigData\IGetAHData.cs" />
+    <Compile Include="SYS\BigData\IHomeDataService.cs" />
+    <Compile Include="SYS\BigData\IGetImageProducts.cs" />
+    <Compile Include="SYS\BigData\GetImageProducts.svc.cs">
+      <DependentUpon>GetImageProducts.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\IKaifangtongji.cs" />
+    <Compile Include="SYS\BigData\IRegister.cs" />
+    <Compile Include="SYS\BigData\ISystemAdmin.cs" />
+    <Compile Include="SYS\BigData\IUserManager.cs" />
+    <Compile Include="SYS\BigData\Kaifangtongji.svc.cs">
+      <DependentUpon>Kaifangtongji.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\Register.svc.cs">
+      <DependentUpon>Register.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\SystemAdmin.svc.cs">
+      <DependentUpon>SystemAdmin.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SYS\BigData\UserManager.svc.cs">
+      <DependentUpon>UserManager.svc</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DAL\" />
+    <Folder Include="SYS\BigData\upload\image\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\IIS7.5.pubxml" />
+    <Content Include="ReleaseNotes.css" />
+    <Content Include="SYS\BigData\DataService.svc" />
+    <Content Include="SYS\BigData\GetAHData.svc" />
+    <Content Include="SYS\BigData\HomeDataService.svc" />
+    <Content Include="SYS\BigData\GetImageProducts.svc" />
+    <Content Include="SYS\BigData\Kaifangtongji.svc" />
+    <Content Include="SYS\BigData\Register.svc" />
+    <Content Include="qqwry.dat" />
+    <Content Include="SYS\BigData\SystemAdmin.svc" />
+    <Content Include="SYS\BigData\UserManager.svc" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="SYS\BigData\Handler.ashx" />
+    <Content Include="Web - 复制.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web - 复制.Debug.config">
+      <DependentUpon>Web - 复制.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web - 复制.Release.config">
+      <DependentUpon>Web - 复制.config</DependentUpon>
+    </Content>
+    <Content Include="SYS\BigData\config.json" />
+    <Content Include="SYS\BigData\controller.ashx" />
+    <Content Include="SYS\BigData\config - 复制.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{c91099f5-9388-40a8-8f22-75eda7ed6250}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBUtility\DBUtility.csproj">
+      <Project>{0ec98648-67f8-4f5f-a49d-fa5bef88bc64}</Project>
+      <Name>DBUtility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>45990</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:45988/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

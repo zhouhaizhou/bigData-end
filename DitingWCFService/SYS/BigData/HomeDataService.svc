@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WcfSmcGridService.SYS.BigData.HomeDataService" CodeBehind="HomeDataService.svc.cs" %>
