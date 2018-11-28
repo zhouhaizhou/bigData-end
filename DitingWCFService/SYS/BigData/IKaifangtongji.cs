@@ -26,9 +26,9 @@ namespace WcfSmcGridService.SYS.BigData
          RequestFormat = WebMessageFormat.Json,
          ResponseFormat = WebMessageFormat.Json,
          BodyStyle = WebMessageBodyStyle.Bare,
-         UriTemplate = "DataUpdateAnalysis"
+         UriTemplate = "DataUpdateAnalysis?flagNum={flagNum}"
        )]
-        string DataUpdateAnalysis();
+        string DataUpdateAnalysis(string flagNum);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -93,6 +93,15 @@ namespace WcfSmcGridService.SYS.BigData
          UriTemplate = "VisitCount"
        )]
         string VisitCount();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+        RequestFormat = WebMessageFormat.Json,
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Bare,
+        UriTemplate = "DataUpdateDivNum"
+      )]
+        string DataUpdateDivNum();
 
     }
 }

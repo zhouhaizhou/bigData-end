@@ -131,5 +131,106 @@ namespace WcfSmcGridService.SYS.BigData
                 throw e;
             }
         }
+
+        public string GetRelateResult()
+        {
+            try
+            {
+                return JsonHelper.ToJSON(sysAdmImp.GetRelateResult());
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+
+        public void DelRelateResult(string ids)
+        {
+            try
+            {
+                sysAdmImp.DelRelateResult(ids);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public void SaveRelateResult(string type, string name, string url,string status, string id)
+        {
+            try
+            {
+                string account = HttpContext.Current.Request.Headers["Authorization"];
+                sysAdmImp.SaveRelateResult(type,name,url, status,id, account);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public string MyDownload(string startTime, string endTime)
+        {
+            try
+            {
+                string account = HttpContext.Current.Request.Headers["Authorization"];
+                return JsonHelper.ToJSON(sysAdmImp.MyDownload(account, startTime,endTime));
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public void DelMyDownload(string ids)
+        {
+            try
+            {
+                sysAdmImp.DelMyDownload(ids);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public string GetMyCollect()
+        {
+            try
+            {
+                string account = HttpContext.Current.Request.Headers["Authorization"];
+                return JsonHelper.ToJSON(sysAdmImp.GetMyCollect(account));
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public void DelMyCollect(string ids)
+        {
+            try
+            {
+                sysAdmImp.DelMyCollect(ids);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
+        public void SaveMyDownload(string id)
+        {
+            try
+            {
+                sysAdmImp.SaveMyDownload(id);
+            }
+            catch (Exception e)
+            {
+                HttpContext.Current.Response.Write("error:" + e.Message);
+                throw e;
+            }
+        }
     }
 }

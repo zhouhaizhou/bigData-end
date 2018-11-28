@@ -32,10 +32,74 @@ namespace WcfSmcGridService.SYS.BigData
 
             switch (action) {
                 case "register": Register(context); break;//获取文件列表
+                case "modufyMyinfo": ModufyMyinfo(context); break;
                 case "dynamicInfo": SaveDynamicInfo(context); break;
             }
         }
-
+        private void ModufyMyinfo(HttpContext Context) {
+            try
+            {
+                NameValueCollection nvc = Context.Request.Form;
+                DateTime dNow = DateTime.Now;
+                string updateTime = dNow.ToString("yyyy-MM-dd HH:mm:ss");
+                string account = nvc["account"];
+                string path = Path.Combine(Context.Server.MapPath(Context.Request["value"]), DateTime.Now.ToString("yyyy-MM-dd"), account);
+                string fileNameStr = Context.Request["filename"];
+                List<RegisterItemFileName> listRegFileName = new List<RegisterItemFileName>();
+                listRegFileName = JsonConvert.DeserializeObject<List<RegisterItemFileName>>(fileNameStr);
+                string sqlUser = "select * from t_user where account='" + account + "'";
+                string sqlUserInfo = "select * from t_userInfo where account='" + account + "'";
+                string sqlUpdateUserInfo = "update [T_UserInfo] set {0} where id={1}";
+                string sqlUpdateUser = "update [T_User] set {0} where id={1}";
+                DataTable dtUser = GetTableId(account, sqlUser);
+                DataTable dtUserInfo = GetTableId(account, sqlUserInfo);
+                string userInfoValues = "", userValues = "";
+                foreach (RegisterItemFileName RegFileName in listRegFileName)
+                {
+                    string key = RegFileName.key;
+                    string value = RegFileName.fileName;
+                    userInfoValues += key + "='" + Path.Combine(path, value) + "',";
+                }
+                foreach (string key in nvc)
+                {
+                    string val = nvc[key];
+                    string temp = key + "='" + val + "',";
+                    if (key == "userType")
+                    {
+                        continue;
+                    }
+                    else if (key == "UserName")
+                    {
+                        userValues += temp;
+                        continue;
+                    }
+                    else if (key == "account")
+                    {
+                        userInfoValues += temp;
+                        userValues += temp;
+                        continue;
+                    }
+                    userInfoValues += temp;
+                }
+                userValues += "updateDate='"+updateTime+"'";
+                userInfoValues = userInfoValues.TrimEnd(',');
+                sqlUpdateUser = string.Format(sqlUpdateUser, userValues, dtUser.Rows[0]["id"]);
+                sqlUpdateUserInfo = string.Format(sqlUpdateUserInfo, userInfoValues, dtUserInfo.Rows[0]["id"]);
+                m_Database.Execute(sqlUpdateUser);
+                m_Database.Execute(sqlUpdateUserInfo);
+                //保存文件
+                SaveRegisterFile(Context, path);
+            }
+            catch (Exception e) {
+                Context.Response.Write(e.Message);
+                throw e;
+            }
+        }
+        //根据账号读取id
+        private DataTable GetTableId(string account,string sql) {
+            DataTable dt = m_Database.GetDataTable(sql);
+            return dt;
+        }
         private void Register(HttpContext Context)
         {
             try {

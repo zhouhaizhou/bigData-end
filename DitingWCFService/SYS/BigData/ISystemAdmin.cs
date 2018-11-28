@@ -87,5 +87,68 @@ namespace WcfSmcGridService.SYS.BigData
       )]
         void UserManagerSave(string values,string id);
 
+        [WebInvoke(Method = "GET",
+          RequestFormat = WebMessageFormat.Json,
+          ResponseFormat = WebMessageFormat.Json,
+          BodyStyle = WebMessageBodyStyle.Bare,
+          UriTemplate = "GetRelateResult"
+      )]
+        string GetRelateResult();
+
+        [WebInvoke(Method = "GET",
+          RequestFormat = WebMessageFormat.Json,
+          ResponseFormat = WebMessageFormat.Json,
+          BodyStyle = WebMessageBodyStyle.Bare,
+          UriTemplate = "DelRelateResult?ids={ids}"
+      )]
+        void DelRelateResult(string ids);
+
+        [WebInvoke(Method = "GET",
+          RequestFormat = WebMessageFormat.Json,
+          ResponseFormat = WebMessageFormat.Json,
+          BodyStyle = WebMessageBodyStyle.Bare,
+          UriTemplate = "SaveRelateResult?type={type}&name={name}&url={url}&status={status}&id={id}"
+      )]
+        void SaveRelateResult(string type,string name,string url,string status,string id);
+
+        [WebInvoke(Method = "GET",
+          RequestFormat = WebMessageFormat.Json,
+          ResponseFormat = WebMessageFormat.Json,
+          BodyStyle = WebMessageBodyStyle.Bare,
+          UriTemplate = "MyDownload?startTime={startTime}&endTime={endTime}"
+      )]
+        string MyDownload(string startTime,string endTime);
+
+        [WebInvoke(Method = "GET",
+          RequestFormat = WebMessageFormat.Json,
+          ResponseFormat = WebMessageFormat.Json,
+          BodyStyle = WebMessageBodyStyle.Bare,
+          UriTemplate = "DelMyDownload?ids={ids}"
+      )]
+        void DelMyDownload(string ids);
+
+        [WebInvoke(Method = "GET",
+         RequestFormat = WebMessageFormat.Json,
+         ResponseFormat = WebMessageFormat.Json,
+         BodyStyle = WebMessageBodyStyle.Bare,
+         UriTemplate = "GetMyCollect"
+     )]
+        string GetMyCollect();
+
+        [WebInvoke(Method = "GET",
+         RequestFormat = WebMessageFormat.Json,
+         ResponseFormat = WebMessageFormat.Json,
+         BodyStyle = WebMessageBodyStyle.Bare,
+         UriTemplate = "DelMyCollect?ids={ids}"
+     )]
+        void DelMyCollect(string ids);
+
+        [WebInvoke(Method = "GET",
+         RequestFormat = WebMessageFormat.Json,
+         ResponseFormat = WebMessageFormat.Json,
+         BodyStyle = WebMessageBodyStyle.Bare,
+         UriTemplate = "SaveMyDownload?id={id}"
+     )]
+        void SaveMyDownload(string id);
     }
 }

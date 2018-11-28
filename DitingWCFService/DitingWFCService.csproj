@@ -168,6 +168,16 @@
     <Content Include="qqwry.dat" />
     <Content Include="SYS\BigData\SystemAdmin.svc" />
     <Content Include="SYS\BigData\UserManager.svc" />
+    <Content Include="Web - 复制.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web - 复制.Debug.config">
+      <DependentUpon>Web - 复制.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web - 复制.Release.config">
+      <DependentUpon>Web - 复制.config</DependentUpon>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -179,16 +189,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="SYS\BigData\Handler.ashx" />
-    <Content Include="Web - 复制.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web - 复制.Debug.config">
-      <DependentUpon>Web - 复制.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web - 复制.Release.config">
-      <DependentUpon>Web - 复制.config</DependentUpon>
-    </Content>
     <Content Include="SYS\BigData\config.json" />
     <Content Include="SYS\BigData\controller.ashx" />
     <Content Include="SYS\BigData\config - 复制.json" />

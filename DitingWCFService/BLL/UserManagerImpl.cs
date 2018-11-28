@@ -30,26 +30,27 @@ namespace WcfSmcGridService.SYS.BigData
             string starLevel = Convert.ToString(drRoleId["starLevel"]);
             string auditState = Convert.ToString(drRoleId["auditState"]);
             string registerDate = Convert.ToString(drRoleId["date"]);
-            string strSQL = "    SELECT DISTINCT(i.[infoKey]),i.[id],[label],[value],[type],[sizeRestrict] ,[description],[accept],[regular],[infoType],[isEdit],a.[roleId],a.[orderIndex],a.[require] FROM D_Registerauth a  LEFT JOIN dbo.D_RegisterItem i ON i.infoKey = a.infoKey WHERE a.roleId = '{0}' and i.infoKey not in ('pass','checkpass')  ORDER BY i.infoType asc, a.orderIndex ASC";
+            string strSQL = "    SELECT i.*,a.[roleId],a.[orderIndex],a.[require] FROM D_Registerauth a  LEFT JOIN dbo.D_RegisterItem i ON i.infoKey = a.infoKey WHERE a.roleId = '{0}' and i.infoKey not in ('pass','checkpass')  ORDER BY i.infoType asc, a.orderIndex ASC";
             strSQL = string.Format(strSQL, roleId);
             DataTable DT_Item = ds_DB.GetDataTable(strSQL);
-
-            
 
             foreach (DataRow dr in DT_Item.Rows)
             {
                 //根据dbo.D_RegisterItem表中的infoKey取T_UserInfo表中对应值放到dbo.D_RegisterItem表中的value
                 string key = dr["infoKey"].ToString();
                 //获取此infoKey在DT_UserInfo中对应的value
-                string userInfoValue=DT_UserInfo.Rows[0][key].ToString();
+                string userInfoValue = DT_UserInfo.Rows[0][key].ToString();
                 //判断infoKey在[D_RegisterItemOptions]表中是否存在，如果存在，dr["value"]就取此表中的MC值，否则dr["value"]就取userInfoValue
-                string sqlOption=" select * from [D_RegisterItemOptions] where PATINDEX('%"+key+"%',[TYPE])>0";
-                DataTable DT_Option=ds_DB.GetDataTable(sqlOption);
-                if(DT_Option.Rows.Count>0){
-                    string sqlMC=" select MC from [D_RegisterItemOptions] where [type]='"+key+"' and Code='"+userInfoValue+"'";
-                    string MC=ds_DB.GetFirstValue(sqlMC);
+                string sqlOption = " select * from [D_RegisterItemOptions] where PATINDEX('%" + key + "%',[TYPE])>0";
+                DataTable DT_Option = ds_DB.GetDataTable(sqlOption);
+                if (DT_Option.Rows.Count > 0)
+                {
+                    string sqlMC = " select MC from [D_RegisterItemOptions] where [type]='" + key + "' and Code='" + userInfoValue + "'";
+                    string MC = ds_DB.GetFirstValue(sqlMC);
                     dr["value"] = MC;
-                }else{
+                }
+                else
+                {
                     dr["value"] = DT_UserInfo.Rows[0][key].ToString();
                 }
                 
