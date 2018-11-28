@@ -216,13 +216,7 @@ namespace WcfSmcGridService.BLL
                            FROM [CimissDB].[dbo].[T_CIMISS_CHN_SITE] 
                            where Station_levl in (11,12,13) ";
 
-            // //本地连接远程服务器上的数据库CimissDB中的表siteTableName在本地进行调试   发布前隐藏 
-            // string strSQL = @"SELECT  [Station_Id_C]
-            //                ,[Station_Name]
-            //                ,[Lat]
-            //                ,[Lon]
-            //                 FROM OPENDATASOURCE( 'SQLOLEDB', 'Data Source=10.228.9.116;User ID=sa;Password=Diting2015').CimissDB.dbo.[T_CIMISS_CHN_SITE] 
-            //                 where Station_levl in (11,12,13) ";
+
 
             strSQL = string.Format(strSQL);
             return ds_DB.GetDataTable(strSQL);
