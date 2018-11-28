@@ -70,8 +70,7 @@ namespace WcfSmcGridService.BLL
                 //直接连接使用远程数据库中的表  或本地有库直接连接  发布前释放
                 string sql = "select top 1 collect_time FROM CimissDB.dbo." + tableName + " order by collect_time desc";
 
-                // //本地连接远程服务器上的数据库CimissDB中的表siteTableName在本地进行调试   发布前隐藏 
-                // string sql = "select top 1 collect_time FROM OPENDATASOURCE( 'SQLOLEDB', 'Data Source=10.228.9.116;User ID=sa;Password=Diting2015').CimissDB.dbo." + tableName + " order by collect_time desc";
+               
                 DataTable dt_time = ds_DB.GetDataTable(sql);
                 if (dt_time != null && dt_time.Rows.Count > 0)
                     maxTime = dt_time.Rows[0]["collect_time"].ToString();
@@ -132,9 +131,7 @@ namespace WcfSmcGridService.BLL
            string strSQL = @"  select Station_Id_C,Station_Name,Province,Station_levl,Lat,Lon,
                                "+ele+ ",collect_time from Cimissdb.dbo." + tableName + " " + where + " Order by  collect_time";
 
-            // //本地连接远程服务器上的数据库CimissDB中的表siteTableName在本地进行调试   发布前隐藏 
-            // string strSQL = @"  select Station_Id_C,Station_Name,Province,Station_levl,Lat,Lon,
-            //                     " + ele + ",collect_time from OPENDATASOURCE( 'SQLOLEDB', 'Data Source=10.228.9.116;User ID=sa;Password=Diting2015').CimissDB.dbo." + tableName + " " + where + " Order by  collect_time";
+            
 
             strSQL = string.Format(strSQL);
             return ds_DB.GetDataTable(strSQL);
