@@ -233,16 +233,6 @@ namespace WcfSmcGridService.BLL
 
         public string GetAirCityInfo(string city)
         {
-            //string url = "http://www.weather.com.cn/data/sk/{0}.html";
-            //string strSQL = "select * from D_CityCode where tabField='" + city + "'";
-            //DataTable dt = ds_DB.GetDataTable(strSQL);
-            //string cityCode = "";
-            //if (dt != null && dt.Rows.Count > 0)
-            //    cityCode = dt.Rows[0]["Code"].ToString();
-
-            //url = string.Format(url, cityCode);
-
-            //string url = "https://www.sojson.com/open/api/weather/json.shtml?city="+city+"";
             city = city.Replace("市", "") + "市";
             string url = "http://api.map.baidu.com/telematics/v3/weather?location="+ city + "&output=json&ak=CF34cbf7412244f8c5e3a2be918eac86";
 
@@ -297,14 +287,6 @@ namespace WcfSmcGridService.BLL
                               ,[City]
                               ,[Lat]
                               ,[Lon],'"+ type + "' as 'Type' FROM CimissDB.dbo." + tableName;
-
-        //    //本地连接远程服务器上的数据库CimissDB中的表siteTableName在本地进行调试   发布前隐藏  
-        //     string strSQL = @"SELECT [Station_Id_C]
-        //                        ,[Station_Name]
-        //                        ,[Province]
-        //                        ,[City]
-        //                        ,[Lat]
-        //                        ,[Lon],'" + type + "' as 'Type' FROM OPENDATASOURCE( 'SQLOLEDB', 'Data Source=10.228.9.116;User ID=sa;Password=Diting2015').CimissDB.dbo." + tableName;
 
 
             if(ModuleName== "earthMeto")

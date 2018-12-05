@@ -37,8 +37,22 @@ namespace WcfSmcGridService.SYS.BigData
             foreach (DataRow dr in DT_Item.Rows)
             {
                 string key = dr["infoKey"].ToString();
-
-                dr["value"] = DT_UserInfo.Rows[0][key].ToString();
+                //获取此infoKey在DT_UserInfo中对应的value
+                string userInfoValue = DT_UserInfo.Rows[0][key].ToString();
+                //判断infoKey在[D_RegisterItemOptions]表中是否存在，如果存在，dr["value"]就取此表中的MC值，否则dr["value"]就取userInfoValue
+                string sqlOption = " select * from [D_RegisterItemOptions] where PATINDEX('%" + key + "%',[TYPE])>0";
+                DataTable DT_Option = ds_DB.GetDataTable(sqlOption);
+                if (DT_Option.Rows.Count > 0)
+                {
+                    string sqlMC = " select MC from [D_RegisterItemOptions] where [type]='" + key + "' and Code='" + userInfoValue + "'";
+                    string MC = ds_DB.GetFirstValue(sqlMC);
+                    dr["value"] = MC;
+                }
+                else
+                {
+                    dr["value"] = DT_UserInfo.Rows[0][key].ToString();
+                }
+                
             }
             //3、添加数据行
 
