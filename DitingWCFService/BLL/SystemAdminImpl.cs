@@ -34,11 +34,11 @@ namespace WcfSmcGridService.BLL
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="parentRoleAuthList"></param>
-        public void GetParAuth(DataTable dt, List<ParentRoleAuth> parentRoleAuthList,string sql,string type)
+        public void GetParAuth(DataTable dt,DataRow [] dr, List<ParentRoleAuth> parentRoleAuthList, string type)
         {
-            if (dt != null && dt.Rows.Count > 0)
+            if (dr != null && dr.Length > 0)
             {
-                foreach (DataRow row in dt.Rows)
+                foreach (DataRow row in dr)
                 {
                     ParentRoleAuth parAuth = new ParentRoleAuth();
                     string moduleId = row["moduleId"].ToString();
@@ -51,36 +51,23 @@ namespace WcfSmcGridService.BLL
                     parAuth.parentModuleId = parentModule;
                     parAuth.children = new List<ParentRoleAuth>();
                     // string childrenSql = "SELECT * FROM dbo.T_Module WHERE ParentModuleID='" + moduleId + "' AND Enable='1' ORDER BY OrderIndex ASC ";
-                    string childrenSql = string.Format(sql,moduleId);
-                    DataTable childrenDT = DB.GetDataTable(childrenSql);
-                    if (childrenDT != null && childrenDT.Rows.Count > 0)  //有子节点
+                    //string childrenSql = string.Format(sql, moduleId);
+                    //DataTable childrenDT = DB.GetDataTable(childrenSql);
+                    DataRow[] childrenDataRow = dt.Select("ParentModuleID = '"+ moduleId + "'");
+                    if (childrenDataRow != null && childrenDataRow.Length > 0)  //有子节点
                     {
-                        GetParAuth(childrenDT, parAuth.children, sql,type);
+                        GetParAuth(dt, childrenDataRow, parAuth.children, type);
                     }
                     parentRoleAuthList.Add(parAuth);
                     if (type == "exist")
                     {
                         string roleId = row["roleId"].ToString();
-                       // FilterAuth(moduleId, parentModule, roleId, parentRoleAuthList);
+                        // FilterAuth(moduleId, parentModule, roleId, parentRoleAuthList);
                     }
                 }
             }
         }
-        public void FilterAuth(string moduleId,string parentModuleId,string roleId, List<ParentRoleAuth> RoleAuthList) {
-            string moduleSql = " SELECT * FROM T_Module WHERE ParentModuleID='"+parentModuleId+"' AND Enable=1";
-            string authSql = "SELECT * ,(SELECT a.ModuleID FROM T_Module a WHERE a.ModuleID=t.ModuleID  GROUP BY a.ModuleID) AS mm FROM T_Module t "+
-            "LEFT JOIN T_RoleAuthority r ON r.ModuleID = t.ModuleID WHERE t.ParentModuleID = '"+parentModuleId+"' AND t.Enable = '1' AND r.RoleID = '"+roleId+"'  ORDER BY t.ModuleID asc";
-            DataTable authDT = DB.GetDataTable(authSql);
-            DataTable moduleDT = DB.GetDataTable(moduleSql);
-            if ((authDT != null) && authDT.Rows.Count < moduleDT.Rows.Count) {  //这个父节点下面的子节点没有全部选中，需要把父节点去掉
-                for (int i = 0; i < RoleAuthList.Count; i++) {
-                    if (RoleAuthList[i].parentModuleId == parentModuleId) {
-                        RoleAuthList.Remove(RoleAuthList[i]);
-                    }
-                }
-            }
-        }
-        public void FilterAuthII(string moduleId, string parentModuleId, string roleId, DataTable dt)
+        public void FilterAuth(string moduleId, string parentModuleId, string roleId, DataTable dt)
         {
             string moduleSql = " SELECT * FROM T_Module WHERE ParentModuleID='" + parentModuleId + "' AND Enable=1";
             string authSql = "SELECT * ,(SELECT a.ModuleID FROM T_Module a WHERE a.ModuleID=t.ModuleID  GROUP BY a.ModuleID) AS mm FROM T_Module t " +
@@ -127,29 +114,18 @@ namespace WcfSmcGridService.BLL
         /// <returns></returns>
         public List<ParentRoleAuth> GetAllRoleAuth(string roleId)
         {
-            string parentModuleId = "0";
             List<ParentRoleAuth> allRole = new List<ParentRoleAuth>();
-            string querySql = "SELECT * FROM dbo.T_Module WHERE ParentModuleID='{0}' AND Enable='1' ORDER BY OrderIndex ASC ";
-            string sql = string.Format(querySql, parentModuleId);
-            DataTable dt = DB.GetDataTable(sql);
+            string querySql = "SELECT * FROM dbo.T_Module WHERE Enable='1' ORDER BY OrderIndex ASC ";
+            DataTable dt = DB.GetDataTable(querySql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                GetParAuth(dt, allRole, querySql,"all");
+                //GetParAuth(dt, allRole, querySql,"all");
+                DataRow[] dr = dt.Select("ParentModuleID = '0'");
+                GetParAuth(dt, dr, allRole, "all");
             }
             return allRole;
         }
-        public List<ParentRoleAuth> GetRoleExistAuth(string roleId) {
-            string querySql = "SELECT * ,(SELECT a.ModuleID FROM T_Module a WHERE a.ModuleID=t.ModuleID  GROUP BY a.ModuleID) AS mm "+
-                "FROM T_Module t LEFT JOIN dbo.T_RoleAuthority r ON r.ModuleID = t.ModuleID WHERE t.ParentModuleID='{0}' AND t.Enable='1' AND r.RoleID = '"+roleId+"'  ORDER BY t.ModuleID asc";
-            string sql = string.Format(querySql,roleId,"0");
-            DataTable dt = DB.GetDataTable(sql);
-            List<ParentRoleAuth> existRole = new List<ParentRoleAuth>();
-            if (dt != null && dt.Rows.Count > 0) {
-                GetParAuth(dt, existRole, querySql,"exist");
-            }
-            return existRole;
-        }
-        public DataTable GetRoleExistAuthII(string roleId) {
+        public DataTable GetRoleExistAuth(string roleId) {
             string querySql = "SELECT * ,(SELECT a.moduleId FROM T_Module a WHERE a.ModuleID=t.ModuleID  GROUP BY a.ModuleID) AS mm " +
                 "FROM T_Module t LEFT JOIN dbo.T_RoleAuthority r ON r.ModuleID = t.ModuleID WHERE t.Enable='1' AND r.RoleID = '" + roleId + "'  ORDER BY t.ModuleID asc";
             //string sql = string.Format(querySql, roleId, "0");
@@ -160,7 +136,7 @@ namespace WcfSmcGridService.BLL
             {
                 string moduleId = dt.Rows[i]["moduleId"].ToString();
                 string parendModuleId = dt.Rows[i]["parentModuleId"].ToString();
-                FilterAuthII(moduleId, parendModuleId, roleId, dt);
+                FilterAuth(moduleId, parendModuleId, roleId, dt);
                 if (count > dt.Rows.Count)
                 {
                     count = count - (count - dt.Rows.Count);
@@ -226,7 +202,7 @@ namespace WcfSmcGridService.BLL
         }
 
         public DataTable GetUser() {
-            string sql = "SELECT u.id, u.account,u.userName,u.enable as userStatus,u.date as createTime,u.updateDate as updateTime,u.starLevel as userLevel,i.mobile,r.description as userType FROM dbo.T_User u " +
+            string sql = "SELECT u.id, u.account,u.userName,u.AuditState as userStatus,u.date as createTime,u.updateDate as updateTime,u.starLevel as userLevel,i.mobile,r.description as userType FROM dbo.T_User u " +
                 "LEFT JOIN dbo.T_UserInfo i ON i.account = u.Account  LEFT JOIN dbo.T_Role r ON u.RoleID=r.Id order by updateDate desc";
             DataTable dt = DB.GetDataTable(sql);
             dt.Columns.Add("userStar",typeof(string));
@@ -267,11 +243,136 @@ namespace WcfSmcGridService.BLL
             string userType = userSaveList[4].value;
             string userStatus = userSaveList[5].value;
             DateTime dNow = DateTime.Now;
-            string update = "update t_user set Account='"+account+"',UserName='"+userName+"',starLevel='"+userLevel+"',enable='"+userStatus+"',updateDate='"+dNow.ToString("yyyy-MM-dd HH:mm:ss")+"'" +
+            string update = "update t_user set Account='"+account+"',UserName='"+userName+"',starLevel='"+userLevel+ "',AuditState='" + userStatus+"',updateDate='"+dNow.ToString("yyyy-MM-dd HH:mm:ss")+"'" +
                " WHERE Account='"+account+ "';update t_userInfo set Account='" + account + "',mobile='" + mobile+ "' where  Account='" + account + "'";
             DB.Execute(update);
         }
+        public DataTable GetRelateResult() {
+            string sql = "SELECT * FROM T_RelateResults order by updateTime desc";
+            DataTable dt = DB.GetDataTable(sql);
+            dt.Columns["content"].ColumnName= "name";
+            dt.Columns.Add("typeTxt",typeof(string));
+            foreach (DataRow dr in dt.Rows) {
+                dr["typeTxt"] = GetTxt(dr["type"].ToString());
+            }
+            return dt;
+        }
+        public string GetTxt(string val) {
+            string txt = "";
+            switch (val) {
+                case "article":txt = "文章";break;
+                case "book": txt = "专著"; break;
+                case "copyright": txt = "软件著作权"; break;
+            }
+            return txt;
+        }
+        public void DelRelateResult(string ids) {
+            ids = ids.Replace("[", "").Replace("]", "");
+            string[] idArr = ids.Split(',');
+            string id = "";
+            foreach (string str in idArr)
+            {
+                id += "'" + str + "',";
+            }
+            id = id.TrimEnd(',');
+            string del = "DELETE T_RelateResults WHERE id IN ("+id+")";
+            DB.Execute(del);
+        }
+        public void SaveRelateResult(string type, string name, string url,string status, string id,string account)
+        {
+            DateTime dNow = DateTime.Now;
+            string date = dNow.ToString("yyyy-MM-dd HH:mm:ss");
+            string sqlUser = "select * from t_user where account='" + account + "'";
+            DataTable DT_User = DB.GetDataTable(sqlUser);   //获取roleID
+            string author = "";
+            if (DT_User != null && DT_User.Rows.Count > 0)
+            {
+                author = DT_User.Rows[0]["userName"].ToString();
+            }
+            string sql = "UPDATE T_RelateResults SET content='"+name+"',url='"+url+"',type='"+ type + "',enable='"+status+"',checkTime='"+ date + "',updateTime='"+ date + "' WHERE id='"+id+"'";
+            if (id == "") {
+                sql = "INSERT INTO T_RelateResults (content,url,type,createTime,updateTime,author,enable) VALUES ('" + name+"','"+url+"','"+type+"','"+date+"','"+date+"','"+ author + "','0')";
+            }
+            DB.Execute(sql);
+        }
+
+        public DataTable MyDownload(string account,string startTime,string endTime)
+        {
+            //数据下载的权限做完之后要改sql，就没有roleid了
+            string sql = "SELECT d.*,m.moduleCnName FROM [T_DownloadList] d left JOIN dbo.T_DataService_Module m ON m.moduleEnName = d.moduleEnName " +
+                "WHERE userName='{0}' and m.roleId={1} AND downState='1' AND downTime BETWEEN '{2} 00:00:00' AND '{3} 23:59:59' ORDER BY downTime DESC";
+            string sqlUser = "select * from t_user where account='"+account+"'";
+            DataTable DT_User = DB.GetDataTable(sqlUser);   //获取roleID
+            string roleID = "";
+            if (DT_User != null && DT_User.Rows.Count > 0) {
+                roleID = DT_User.Rows[0]["RoleId"].ToString();
+            }
+            sql = string.Format(sql,account,roleID,startTime,endTime);
+            DataTable dt = DB.GetDataTable(sql);
+            dt.Columns.Add("fileName", typeof(string));
+            dt.Columns["downTime"].ColumnName = "downLoadTime";
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    string province = dr["province"].ToString();
+                    string date = dr["date"].ToString();
+                    string moduleCnName = dr["moduleCnName"].ToString();
+                    string format = dr["famat"].ToString();
+                    string fileName = province + "_" + date + "_" + moduleCnName + "." + format;
+                    dr["fileName"] = fileName;
+                }
+            }
+            return dt;
+        }
+
+        public void DelMyDownload(string ids) {
+            ids = ids.Replace("[", "").Replace("]", "");
+            string[] idArr = ids.Split(',');
+            string id = "";
+            foreach (string str in idArr)
+            {
+                id += "'" + str + "',";
+            }
+            id = id.TrimEnd(',');
+            string delSql = "  DELETE T_DownloadList WHERE id in (" + id + ")";
+            DB.Execute(delSql);
+        }
+        public DataTable GetMyCollect(string account) {
+            //数据下载的权限做完之后要改sql，就没有roleid了
+            string sql = "SELECT m.*,d.moduleCnName,d.parentModule FROM [T_MyLikeData] m LEFT JOIN [T_DataService_Module] d ON m.moduleName=d.moduleEnName WHERE m.account='{0}' AND d.roleId='{1}' ORDER BY insertTime DESC";
+            string sqlUser = "select * from t_user where account='" + account + "'";
+            DataTable DT_User = DB.GetDataTable(sqlUser);   //获取roleID
+            string roleID = "";
+            if (DT_User != null && DT_User.Rows.Count > 0)
+            {
+                roleID = DT_User.Rows[0]["RoleId"].ToString();
+            }
+            sql = string.Format(sql, account, roleID);
+            DataTable dt = DB.GetDataTable(sql);
+            return dt;
+        }
+
+        public void DelMyCollect(string ids)
+        {
+            ids = ids.Replace("[", "").Replace("]", "");
+            string[] idArr = ids.Split(',');
+            string id = "";
+            foreach (string str in idArr)
+            {
+                id += "'" + str + "',";
+            }
+            id = id.TrimEnd(',');
+            string delSql = "  DELETE T_MyLikeData WHERE id in (" + id + ")";
+            DB.Execute(delSql);
+        }
+        public void SaveMyDownload(string id)
+        {
+            string insertSql = "UPDATE dbo.T_DownloadList SET downState='0' WHERE id='"+id+"'";
+            DB.Execute(insertSql);
+        }
     }
+
+
+
 
     class UserManagerSave {
         public string value;

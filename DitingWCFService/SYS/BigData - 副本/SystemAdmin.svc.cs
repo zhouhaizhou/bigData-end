@@ -65,7 +65,7 @@ namespace WcfSmcGridService.SYS.BigData
             try
             {
                 //return JsonHelper.ToJSON(sysAdmImp.GetRoleExistAuth(roleId));
-                return JsonHelper.ToJSON(sysAdmImp.GetRoleExistAuth(roleId));
+                return JsonHelper.ToJSON(sysAdmImp.GetRoleExistAuthII(roleId));
             }
             catch (Exception e)
             {

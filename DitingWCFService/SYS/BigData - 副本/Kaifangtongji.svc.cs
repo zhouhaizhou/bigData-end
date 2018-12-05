@@ -25,9 +25,8 @@ namespace WcfSmcGridService.SYS.BigData
         public string aaa() {
             return "aaaa";
         }
-
-        /// <summary>
-		/// 获取数据更新统计生成的div个数
+ 		/// <summary>
+        /// 获取数据更新统计生成的div个数
         /// </summary>
         /// <returns></returns>
         public string DataUpdateDivNum()
@@ -51,26 +50,17 @@ namespace WcfSmcGridService.SYS.BigData
         /// 数据更新统计
         /// </summary>
         /// <returns></returns>
-         public string DataUpdateAnalysis(string flagNum)
+
+        public string DataUpdateAnalysis()
         {
             try
             {
                 Database DB = new Database("DBCONFIG116");
-                string sql = "SELECT * FROM [dbo].[T_DataAnalysis] WHERE flag="+flagNum+" ORDER BY date";
-                string nameSql = "SELECT moduleCnName FROM [dbo].[T_DataAnalysis] WHERE flag=" + flagNum + " group by moduleCnName";
+                string sql = "SELECT * FROM [dbo].[T_DataAnalysis] ORDER BY date";
                 DataTable dt = DB.GetDataTable(sql);
-                DataTable dtName = DB.GetDataTable(nameSql);
-                string resultNameDT = DtbTime2Json(dtName);                         
-                string resultDT=DtbTime2Json(dt);
-                
-                string jsonString = string.Empty;
-                jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(new {
-                    dataValue = resultDT,
-                    dataName = resultNameDT
-                });
-                return jsonString;
-                //return DtbTime2Json(dt);
-               
+                return DtbTime2Json(dt);
+                //string cs = "cs";
+                //return cs;
 
             }
             catch (Exception e)
@@ -90,7 +80,7 @@ namespace WcfSmcGridService.SYS.BigData
                 Database DB = new Database("DBCONFIG116");
                 //string sql = string.Format("select COUNT([format]) as fcount,[format] from [dbo].[T_DownloadRank] where"
                     //+ "[format]is not NUll group by [format] order by [format]");
-                string sql= "select COUNT([type]) as fcount,[type] as format from [dbo].[D_FileType] where[type] is not NUll group by [type] order by[type]";
+                string sql= " select COUNT([Fieldtype]) as fcount,[Fieldtype] as format from [dbo].[D_Fieldtype] where[Fieldtype] is not NUll group by[Fieldtype] order by[Fieldtype]";
                 DataTable dt = DB.GetDataTable(sql);
                 //加一列写百分比
                 dt.Columns.Add("percent");
@@ -211,7 +201,7 @@ namespace WcfSmcGridService.SYS.BigData
                 string sql = "select moduleCnName,date,ifUpdate from [T_DataUpdateMonitor] WHERE date Between '" + startTime + "' AND '" + endTime + "'";
                 DataTable dt = DB.GetDataTable(sql);
                 //string sqlDis = "select moduleCnName from [T_DataUpdateMonitor] group by moduleCnName";//查一下c#选一列中不同值？？
-                string sqlDis = "select moduleCnName from [T_DataUpdateMonitor] group by moduleCnName";//查一下c#选一列中不同值？？
+                string sqlDis = "SELECT [ModuleNameFlag],[ModuleName] FROM [T_Module] WHERE [ParentModuleID]=10202";
                 DataTable DT_Dis = DB.GetDataTable(sqlDis);
                 List<KaifangtongjiClass> result = new List<KaifangtongjiClass>();
 
@@ -225,6 +215,11 @@ namespace WcfSmcGridService.SYS.BigData
                     {
                         DataRow[] dr = dt.Select("moduleCnName='" + name + "' and date>='" + time + "' AND date <='" + time.AddHours(2) + "'");
                         string f = "";
+                        if (dr.Length == 0)
+                        {
+                            f = "";
+                        }
+                        else {
                          for (int j = 0; j < dr.Length; j++)
                         {
                             if (dr[j]["ifUpdate"].ToString() == "1")
@@ -233,6 +228,7 @@ namespace WcfSmcGridService.SYS.BigData
                             } else if (dr[j]["ifUpdate"].ToString() == "2") {
                                 f = "2";
                             }
+                        }
                         }
                        
                         Data d = new Data();
