@@ -94,7 +94,7 @@ namespace WcfSmcGridService.BLL
             List<RelateResultsGroup> result = new List<RelateResultsGroup>();
             
             //获取文章
-            string strSql1 = @"select * from [dbo].[T_RelateResults] where type='article'";
+            string strSql1 = @"select * from [dbo].[T_RelateResults] where type='article' and enable='1'";
             strSql1 = string.Format(strSql1);
             DataTable dt1 = home_DB.GetDataTable(strSql1);
             List<Articles> articleList = new List<Articles>();//定义一个list集合
@@ -109,7 +109,7 @@ namespace WcfSmcGridService.BLL
                 }
             }
             //获取专著
-            string strSql2 = @"select * from [dbo].[T_RelateResults] where type='book'";
+            string strSql2 = @"select * from [dbo].[T_RelateResults] where type='book' and enable='1'";
             strSql2 = string.Format(strSql2);
             DataTable dt2 = home_DB.GetDataTable(strSql2);
             List<Books> bookList = new List<Books>();
@@ -123,7 +123,7 @@ namespace WcfSmcGridService.BLL
                 }
             }
             //获取软件著作权
-            string strSql3 = @"select * from [dbo].[T_RelateResults] where type='copyright'";
+            string strSql3 = @"select * from [dbo].[T_RelateResults] where type='copyright' and enable='1'";
             strSql3 = string.Format(strSql3);
             DataTable dt3 = home_DB.GetDataTable(strSql3);
             List<Copyrights> copyrightList = new List<Copyrights>();

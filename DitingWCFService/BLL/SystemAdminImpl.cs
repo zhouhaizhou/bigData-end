@@ -338,7 +338,7 @@ namespace WcfSmcGridService.BLL
         }
         public DataTable GetMyCollect(string account) {
             //数据下载的权限做完之后要改sql，就没有roleid了
-            string sql = "SELECT m.*,d.moduleCnName,d.parentModule FROM [T_MyLikeData] m LEFT JOIN [T_DataService_Module] d ON m.moduleName=d.moduleEnName WHERE m.account='{0}' AND d.roleId='{1}' ORDER BY insertTime DESC";
+            string sql = "SELECT m.*,d.moduleCnName,d.parentModule,d.likesCount FROM [T_MyLikeData] m LEFT JOIN [T_DataService_Module] d ON m.moduleName=d.moduleEnName WHERE m.account='{0}' AND d.roleId='{1}' ORDER BY insertTime DESC";
             string sqlUser = "select * from t_user where account='" + account + "'";
             DataTable DT_User = DB.GetDataTable(sqlUser);   //获取roleID
             string roleID = "";
