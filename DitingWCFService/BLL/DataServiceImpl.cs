@@ -817,6 +817,82 @@ namespace WcfSmcGridService.BLL
                 return ex.Message;
             }
         }
-    
+        public List<Comment> GetAllComment(string moduleId) {
+            List<Comment> commentList = new List<Comment>();
+            if(moduleId!=""){
+                string sql = "select c.*,u.UserName from T_Comment c left join T_User u on c.account=u.Account where moduleId ='" + moduleId + "' order by time desc";
+                DataTable dt = ds_DB.GetDataTable(sql);
+                
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    GetParentComment(dt, -1, commentList, "", "parent");
+                }
+            }else{
+
+            }
+            return commentList;
+        }
+
+        private static void GetParentComment(DataTable dt,int answer, List<Comment> commentList,string userName,string type)
+        {
+            string filter = "answerId=" + answer + "";
+            DataRow[] dr = dt.Select(filter);
+            if (dr != null && dr.Length > 0)
+            {
+                foreach (DataRow r in dr)
+                {
+                    Comment c = new Comment();
+                    c.id =int.Parse(r["id"].ToString());
+                    DateTime time = DateTime.Parse(r["time"].ToString());
+                    string timeTxt = GetCommentDate(time);
+                    c.time = timeTxt == "" ? time.ToString("yyyy-MM-dd HH:mm:ss"):timeTxt;
+                    c.content = r["comment"].ToString();
+                    string user = r["userName"].ToString();
+                    c.sender = user;
+                    c.account = r["account"].ToString();
+                    c.receiver = userName;
+                    c.answer = new List<Comment>();
+                    if (type == "parent")
+                    {
+                        GetParentComment(dt, c.id, c.answer, r["userName"].ToString(), "children");
+                    }
+                    else {
+                        GetParentComment(dt, c.id, commentList, r["userName"].ToString(), "children");
+                    }
+                    commentList.Add(c);
+                }
+            }
+        }
+        public static string GetCommentDate(DateTime time) {
+            DateTime dNow = DateTime.Now;
+            string txt = "";
+            TimeSpan timeSpan = dNow - time;
+            if (timeSpan.TotalSeconds < 2)
+            {
+                txt = "刚刚";
+            }
+            else if (timeSpan.TotalSeconds < 60)
+            {
+                txt = ((int)timeSpan.TotalSeconds).ToString() + "秒前";
+            }
+            else if (timeSpan.TotalMinutes < 60)
+            {
+                txt = ((int)timeSpan.TotalMinutes).ToString() + "分钟前";
+            }
+            else if (timeSpan.TotalHours < 24)
+            {
+                txt =((int)timeSpan.TotalHours).ToString() + "小时前";
+            }
+            else if (timeSpan.TotalDays <= 7) {
+                txt= ((int)timeSpan.TotalDays).ToString() + "天前";
+            }
+            return txt;
+        }
+        public void ClickComment(string moduleId, string id, string inputComment,string account) {
+            DateTime dNow = DateTime.Now;
+            string insert = "insert into T_Comment (time,comment,account,moduleId,answerId) values ('{0}','{1}','{2}','{3}',{4})";
+            insert = string.Format(insert,dNow.ToString("yyyy-MM-dd HH:mm:ss"),inputComment,account,moduleId,id);
+            ds_DB.Execute(insert);
+        }
     }
 }

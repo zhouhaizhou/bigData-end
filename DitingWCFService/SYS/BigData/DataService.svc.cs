@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
+using System.Web;
 using WcfSmcGridService.BLL;
 
 namespace WcfSmcGridService.SYS.BigData
@@ -540,6 +541,32 @@ namespace WcfSmcGridService.SYS.BigData
                 string recordInfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " GetAWSData " + ex.Message;
                 LogManager.WriteLogRecord(DateTime.Now.ToString("yyyy年MM月") + "污染天气大数据平台", recordInfo);
                 return "ERROR";
+            }
+        }
+        public string GetAllComment(string moduleId)
+        {
+            try
+            {
+                string account = HttpContext.Current.Request.Headers["Authorization"];
+                return JsonHelper.ToJSON(dsImpl.GetAllComment(moduleId));
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Current.Response.Write(ex.Message);
+                throw ex;
+            }
+        }
+        public void ClickComment(string moduleId, string id, string inputComment)
+        {
+            try
+            {
+                string account = HttpContext.Current.Request.Headers["Authorization"];
+                dsImpl.ClickComment(moduleId,id,inputComment,account);
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Current.Response.Write(ex.Message);
+                throw ex;
             }
         }
     }

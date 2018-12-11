@@ -96,6 +96,7 @@
     <Compile Include="Model\AllRole.cs" />
     <Compile Include="Model\Articles.cs" />
     <Compile Include="Model\Books.cs" />
+    <Compile Include="Model\Comment.cs" />
     <Compile Include="Model\Copyrights.cs" />
     <Compile Include="Model\DataServiceGroupModuleVo.cs" />
     <Compile Include="Model\DataServiceModuleVo.cs" />

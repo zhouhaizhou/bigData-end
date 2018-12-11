@@ -436,5 +436,23 @@ namespace WcfSmcGridService.SYS.BigData
         )]
         string deleteLikeData(string moduleEnName, string account);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+         RequestFormat = WebMessageFormat.Json,
+         ResponseFormat = WebMessageFormat.Json,
+         BodyStyle = WebMessageBodyStyle.Bare,
+         UriTemplate = "GetAllComment?moduleId={moduleId}"
+       )]
+        string GetAllComment(string moduleId);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+        RequestFormat = WebMessageFormat.Json,
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Bare,
+        UriTemplate = "ClickComment?moduleId={moduleId}&id={id}&inputComment={inputComment}"
+      )]
+        void ClickComment(string moduleId, string id, string inputComment);
+
     }
 }
